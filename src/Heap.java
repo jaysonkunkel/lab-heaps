@@ -178,20 +178,60 @@ public class Heap<T> implements LinearStructure<T> {
     } // if/else
   } // dump(PrintWriter, int, String)
 
+  int heapDownHelper(int i){
+    if (this.values.get(right(i)) == null){
+      return left(i); 
+    } else {
+      if(this.priority.compare(this.values.get(left(i)), this.values.get(right(i))) <= 0){
+        return left(i);
+      } else {
+        return right(i);
+      } 
+    }
+  }
+
   /**
    * Restore a heap starting at position i by swapping down as
    * necessary.
    */
   void heapDown(int i) {
-    // STUB
-  } // heapDown(i)
+    T root = this.values.get(i);
+
+    // if (this.values.get(left(i)) == null){
+    //   return;
+    // }
+    if(left(i) >= this.size){
+      return;
+    }
+
+    int greatestChild = this.heapDownHelper(i);
+
+    if(this.priority.compare(this.values.get(greatestChild), root) <= 0){
+      ArrayUtils.swap(this.values, greatestChild, i);
+      System.out.println("got here");
+      heapDown(greatestChild);
+    }
+
+    } // heapDown(i)
 
   /**
    * Restore a heap in which position i may be in the wrong place
    * with respect to its ancestors by swapping up as necessary.
    */
   void heapUp(int i) {
-    // STUB
+    if(i == 0){
+      return;
+    }
+
+    T child = this.values.get(i);
+    T parent = this.values.get(parent(i));
+
+    if(this.priority.compare(child, parent) <= 0){
+      ArrayUtils.swap(this.values, i, parent(i));
+      heapUp(parent(i));
+    }
+    //heapUp(parent(i));
+
   } // heapUp(i)
 
   /**
